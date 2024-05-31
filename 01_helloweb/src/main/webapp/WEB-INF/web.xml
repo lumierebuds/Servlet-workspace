@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<!-- 
+	web.xml?
+	 - 배포 서술자(dd) 웹 애플리케이션의 기본적인 설정들을 작성하는 파일
+	 - 서버 구동시 가장 먼저 읽혀지는 파일.
+	 - Servelet, Filter, Listener, Wrapper 등 기록 가능. 
+	 - 
+ -->
+ 
+
+  <display-name>01_helloweb</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+  <!-- Servlet 등록 -->
+  <servlet>
+	<servlet-name>TestPerson1Servlet</servlet-name>
+	<servlet-class>com.kh.web.servlet.TestPerson1Servlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+	<servlet-name>TestPerson2Servlet</servlet-name>
+	<servlet-class>com.kh.web.servlet.TestPerson2Servlet</servlet-class>
+  </servlet>
+  
+  <!-- Servlet 매핑정보 설정 -->
+  <servlet-mapping>
+  	<servlet-name>TestPerson1Servlet</servlet-name>
+  	<url-pattern>/testPerson1.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+  	<servlet-name>TestPerson2Servlet</servlet-name>
+  	<url-pattern>/testPerson2.do</url-pattern>
+  </servlet-mapping>
+</web-app>
+
