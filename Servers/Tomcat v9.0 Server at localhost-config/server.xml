@@ -162,7 +162,7 @@
 
         
       <Context docBase="01_helloweb" path="/hello" reloadable="true" source="org.eclipse.jst.jee.server:01_helloweb"/>
-      <Context docBase="02_ActionTag_EL" path="/action" reloadable="true" source="org.eclipse.jst.jee.server:02_ActionTag_EL"/></Host>
+      <Context docBase="02_ActionTag_EL" path="/action" reloadable="true" source="org.eclipse.jst.jee.server:02_ActionTag_EL"/><Context docBase="03_ajax" path="/ajax" reloadable="true" source="org.eclipse.jst.jee.server:03_ajax"/></Host>
     </Engine>
   </Service>
 </Server>
