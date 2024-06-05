@@ -53,7 +53,7 @@
 				
 				$("h1.selected").html(selected.item.label);
 			},
-			focus : function(){
+			focus : function(){ // 포커스시 실행
 				return false;
 			}
 		})

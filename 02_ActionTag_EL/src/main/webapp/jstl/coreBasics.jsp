@@ -135,7 +135,7 @@ th, td {
 		<c:param name="pcount" value="10"/>
 		<c:param name="option" value= "black"/>
 		<c:param name="option" value="128gb"/>
-
+		
 	</c:url>
 	
 	<a href="${query}">c:url을 이용한 방식</a>
