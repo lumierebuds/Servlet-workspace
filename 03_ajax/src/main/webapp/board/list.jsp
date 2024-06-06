@@ -37,7 +37,7 @@
 			},
 			url : "/ajax/board/view",
 			success : function(data){
-				console.log(data);
+				$outer.html(data);
 			}, 
 			error : function(xhr){
 				console.log(xhr);
