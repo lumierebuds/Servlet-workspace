@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="login">
+		SELECT * 
+		FROM MEMBER 
+		WHERE USER_ID = ?
+		  AND USER_PWD = ? 
+	      AND STATUS = 'Y'
+	</entry>
+	<entry key="idCheck">
+		SELECT * 
+		FROM MEMBER 
+		WHERE USER_ID = ? 
+	</entry>
+</properties>
