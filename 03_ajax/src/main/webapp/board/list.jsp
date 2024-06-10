@@ -27,6 +27,7 @@
 	</tbody>
 </table>
 <script>
+
 	function view(tr){
 		var $outer = $(".outer");
 		console.log($(tr).data("id"));

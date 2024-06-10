@@ -16,7 +16,6 @@ import com.kh.board.model.vo.Board;
 @WebServlet("/board/insert")
 public class BoardInsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private int id = 0;
 
 	public BoardInsertServlet() {
 		super();
@@ -32,21 +31,31 @@ public class BoardInsertServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		List<Board> boards = (List) session.getAttribute("boards"); // 세션스코프로 저장하기 위해서 가져온 속성
+		// 게시글 생성시 예외처리
+		try {
+			HttpSession session = request.getSession();
+			List<Board> boards = (List) session.getAttribute("boards"); // 세션스코프로 저장하기 위해서 가져온 속성
 
-		Board board = new Board();
-		board.setNo(id++);
-		board.setTitle(request.getParameter("title"));
-		board.setNickname(request.getParameter("nickname"));
-		board.setContent(request.getParameter("content"));
-		board.setCreateDate(new Date());
+			Board board = new Board();
+			board.setNo(boards.size() + 1); // [추가되는 게시물의 크기]
+			board.setTitle(request.getParameter("title"));
+			board.setNickname(request.getParameter("nickname"));
+			board.setContent(request.getParameter("content"));
+			board.setCreateDate(new Date());
 
-		boards.add(board);
+			boards.add(board);
 
-		session.setAttribute("boards", boards);
+			session.setAttribute("boards", boards);
 
-		request.getRequestDispatcher("/board/list.jsp").forward(request, response);
+			response.setContentType("text/plain; charset=utf-8");
+			response.getWriter().print("게시글 등록성공!");
+
+			// request.getRequestDispatcher("/board/list.jsp").forward(request, response);
+
+		} catch (Exception e) {
+			response.getWriter().print("게시글 등록실패");
+		}
+
 	}
 
 }

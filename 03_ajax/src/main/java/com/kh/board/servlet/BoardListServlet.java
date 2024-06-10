@@ -25,8 +25,13 @@ public class BoardListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.setAttribute("id", 0); // session 스코프로 id를 저장하고 게시글 작성시 계속 증가됨
+		// session.setAttribute("id", 0); // session 스코프로 id를 저장하고 게시글 작성시 계속 증가됨 (사용x)
 		session.setAttribute("boards", boards);
+
+		// [강사님코드]
+		// HttpSession session = request.getSession();
+		// List<Board> list = (List<Board>)session.getAttribute("list");
+		// request.setAttribute("list", list);
 
 		request.getRequestDispatcher("/board/list.jsp").forward(request, response);
 

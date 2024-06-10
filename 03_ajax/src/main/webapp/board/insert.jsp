@@ -37,13 +37,13 @@
 				content : $("[name=content]").val(),
 			}, 
 			success : function(data){
-				alert("작성완료!");
-				$outer.html(data);
+				alert(data);
+				render();
 			}, 
 			error: function(xhr){
-				console.log(xhr);
-				}
-			})
+				alert(xhr);
+			}
 		})
+	})
 </script>
 
