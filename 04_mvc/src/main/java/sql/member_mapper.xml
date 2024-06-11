@@ -13,4 +13,27 @@
 		FROM MEMBER 
 		WHERE USER_ID = ? 
 	</entry>
+	
+	<entry key="insertMember">
+		INSERT INTO MEMBER(
+			USER_NO,
+			USER_ID,
+			USER_PWD,
+			USER_NAME,
+			PHONE,
+			EMAIL,
+			ADDRESS,
+			INTEREST
+		) VALUES (
+			SEQ_UNO.NEXTVAL,
+			?,
+			?,
+			?,
+			?,
+			?,
+			?,
+			?)
+	</entry>
+	
+	
 </properties>

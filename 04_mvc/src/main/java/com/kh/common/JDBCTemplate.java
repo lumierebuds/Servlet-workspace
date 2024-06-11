@@ -16,6 +16,7 @@ public class JDBCTemplate {
 			Class.forName("oracle.jdbc.driver.OracleDriver"); // 해당 코드가 자동으로 생성되어야 하는데 되지 않았음 - 톰캣이 서버를 시작하다보니 해당 코드가
 																// 생성되지 않음
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "C##SERVER", "SERVER");
+			conn.setAutoCommit(false); // 자동 커밋 설정을 비활성화
 
 		} catch (SQLException e) {
 			e.printStackTrace();
