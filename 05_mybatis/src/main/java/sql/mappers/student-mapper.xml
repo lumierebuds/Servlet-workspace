@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 한 매퍼파일마다 한개씩 존재해야함 -->
+<mapper namespace="student">
+	<!-- 값전달시 #{getter에서 get을 제외하고 소문자로 시작하는 이름} -->
+	<!-- id : id는 고유해야함 -->
+	<!-- parameterType : student는 별칭으로 설정한 것 -->
+	<insert id="insertStudent" parameterType="student"> 
+		INSERT INTO STUDENT(NO, NAME, TEL)
+		VALUES(
+			SEQ_STUDENT_NO.NEXTVAL,
+			#{name},
+			#{tel}
+		)	
+	</insert>
+	<!-- #{name} #{tel} / 전달받은 학생객체로 부터 getter 함수를 호출-->
+</mapper>
