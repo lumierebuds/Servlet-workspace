@@ -9,6 +9,9 @@
 	<settings>
 		<!-- null값으로 넘어온 데이터가 있다면 ""빈칸이 아닌 NULL로 인식시키는 설정 -->
 		<setting name="jdbcTypeForNull" value="NULL"/>
+		
+		<!-- 언더스코어 컬럼을 카멜케이스로 변경해서 매핑해오는 속성  -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
 	
 	<!-- typeAliases : VO/DTO 클래스들의 풀클래스명을 간단한 별칭으로 등록할 수 있는 영역 -->

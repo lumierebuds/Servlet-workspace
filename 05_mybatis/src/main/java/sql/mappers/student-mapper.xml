@@ -4,6 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : 한 매퍼파일마다 한개씩 존재해야함 -->
 <mapper namespace="student">
+	<!-- 
+		<insert id="각 sql문들의 식별자" parameterType="매개변수로 전달받은 자바타입 혹은 별칭">
+		
+		</insert>
+		<update>
+		<delete>
+		
+		- 값전달시 파라미터가 vo클래스일시 : #{필드명}
+		-					기본자료형으로 전달받았을때 #{변수명}
+		- 					Map객체로 전달받았을때 #{map의 key값}
+		- jdbc의 ?를 대신하는 문법
+		
+	 -->
+
 	<!-- 값전달시 #{getter에서 get을 제외하고 소문자로 시작하는 이름} -->
 	<!-- id : id는 고유해야함 -->
 	<!-- parameterType : student는 별칭으로 설정한 것 -->
@@ -16,4 +30,119 @@
 		)	
 	</insert>
 	<!-- #{name} #{tel} / 전달받은 학생객체로 부터 getter 함수를 호출-->
+	
+	<insert id="insertStudentMap" parameterType="java.util.Map">
+		INSERT INTO STUDENT(NO, NAME, TEL)
+		VALUES(
+			SEQ_STUDENT_NO.NEXTVAL,
+			#{name},
+			#{tel}
+		)	
+	</insert>
+	
+	<!-- 
+		<select id="식별자" parameterType="매개변수로 전달받은 자바타입 혹은 별칭"
+		resultType="조회결과를 반환하고자 하는 자바타입"
+		resultMap="조회결과를 뽑아서 매핑을 해줌 resultMap의 id">
+		
+		- select 태그는 resultType/resultMap 둘 중 하나는 반드시 작성해야함.(필수속성)
+		- resultType/resultMap? 
+		  반환값의 자료형, 자바의 기본자료형, vo클래스를 넣어주면 지정된 자료형에 맞춰서 결과값을(ResultSet) 자동으로 매핑해줌
+		- DML태그들은 반환형이 int 고정이기 때문에 생략 가능
+	 -->
+	
+	<select id="selectStudentCount" resultType="int">
+		SELECT COUNT(*) 
+		FROM STUDENT
+	</select>
+	
+	<!-- <resultMap type="" id=""></resultMap>  -->
+	
+	<!-- 
+		마이바티스의 ResultSet -> VO 자동변환규칙
+		1. resultType으로 지정한 자료형의 기본생성자 호출 
+		2. VO 클래스의 필드명과 조회된 DB의 칼럼명이 일치하는 경우 필드의 setter함수를 호출
+		3. db의 자료형 java의 자료형 형 변환
+			varchar2, char -> String
+			number -> int/double
+			date -> java.util.Date
+		
+		필드명과 칼럼명이 불일치하는경우 해결법
+		1. 별칭지정(대소문자 구분위해 ""추가)
+		2. resultMap - db컬럼과 vo필드를 연결
+		3. mybatis-config.xml의 설정중 mapUnderscoreToCamelCase
+		  -> 언더스코어 표기법을 카멜케이스 표기법으로 변경해주는 속성		
+	 -->
+	
+	<!-- mybatis-config에서 typeAliases안에 Student 클래스를 'student'로 별칭 지정 => resultType = "student"로 인식 -->
+	<select id="selectOneStudent" parameterType="int" resultType="student">
+		-- SELECT no, name, tel, reg_date as "regDate"
+		SELECT * 
+		FROM STUDENT
+		WHERE NO = #{no}
+	</select>
+	
+	<select id="selectOneStudentMap" parameterType="int" resultMap="studentVoMap"> <!-- resultType="student" -->
+		SELECT * FROM STUDENT
+		WHERE NO = ${no}
+	
+	</select>
+	
+	<update id="updateStudent"> <!-- parameterType 생략 가능 -->
+		UPDATE STUDENT SET
+		NAME = #{name}, 
+		TEL = #{tel}
+		WHERE NO = #{no}
+	</update>
+	
+	
+	<delete id="deleteStudent">
+		DELETE FROM 
+		STUDENT 
+		WHERE NO = #{no}
+	</delete>
+	
+	<!--
+		만약 List 타입으로 반환을 하게된다면 내부적으로 
+		이런 코드가 실행되는것이다. 
+		while(rset,next()){
+		new List();
+		}
+		
+		동작 과정 
+		- 메서드 내부에 ArrayList가 생성됨 
+		- 이 리스트 타입에 while 문을 반복하여 데이터가 
+		  없을때까지 student 객체를 만들어 추가해주도록 한다. 
+		
+	 -->
+	<select id="selectStudentList" resultType="student">
+		SELECT * FROM STUDENT
+		ORDER BY NO DESC
+	</select>
+	
+	
+	<!-- List<Map<String, Object>> list 형태로 데이터 조회하는 코드 작성후, -->
+	<select id="selectStudentListMap" resultMap="studentVoMap">
+		SELECT * FROM STUDENT
+		ORDER BY NO DESC
+	</select>
+	
+	
+	<!-- 
+		resultMap 
+		- column과 property명이 동일하다면 해당태그는 생략가능 
+		- resultMap 재사용 가능
+		- 복잡한 매핑처리시 효율적임	
+	 -->
+	
+	<resultMap id="studentVoMap" type="map"> <!-- map 타입으로 반환되는 resultMap / 내가 원하는 자료형으로 테스트 -->
+		<!-- pk 칼럼용 태그(id) -->
+		<id column="no" property="no"/>
+		<!-- 나머지 칼럼 -->
+		<!-- <result column="name" property="name"/>
+		<result column="tel" property="tel"/> -->
+		<result column="reg_date" property="regDate"/>
+	</resultMap>
+	
 </mapper>
+
