@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp">
+	<select id="selectAllEmp" resultType="map">
+		SELECT * FROM EMP
+		ORDER BY EMP_ID
+	</select>
+	
+	<!--  
+		1. 테이블명, 컬럼명등의 식별자를 표현시에는 ''를 붙이지 않는 ${col}
+		2. 데이터를 매핑할때는 #{value} 
+	-->	
+	<select id="search1" parameterType="map" resultType="map">
+		SELECT * FROM EMP
+		WHERE ${searchType} LIKE '%' || #{searchKeyword} || '%'
+	</select>	
+	
+	<select id="search2" parameterType="map" resultType="map">
+		SELECT * 
+		FROM (
+			SELECT e.*, 
+				DECODE(SUBSTR(EMP_NO, 8, 1) , '1', '남' ,'3', '남', '여') GENDER
+			FROM EMP e
+		) e 
+		<!-- 
+			where 태그 몸통이 비었다면 WHERE 키워드 제거(쿼리문에 추가X)
+			where 태그 시작이 AND나 OR가 온다면 AND/OR 키워드 제거(GENDER는 검색안하고, searchType을 검색하면 AND 조건은 사라짐)
+		 -->
+		 <!-- 전체 칼럼을 조회하는 * 은 별칭과 함께 조회한다. -->
+		<where>	
+			<if test="gender != null and gender != '' "> <!-- 전달된 map에 gender가 존재하면? / EL 표현식은 못쓴다. -->
+				GENDER = #{gender}
+			</if>
+			<if test="searchType != null and searchType !='' ">
+				AND ${searchType} LIKE '%' || #{searchKeyword} || '%'
+			</if>
+			<!-- 
+				CDATA Section
+				- xml의 예약문자 (< > &)등을 문자 그대로 사용하고자 할때 사용 
+				<![CDATA[문자그대로처리할값..]}>
+			 -->	
+			<if test="salary != null and salary != 0 ">
+				<if test="salaryCompare != null and salaryCompare != '' " >
+					<choose>
+						<when test="salaryCompare eq 'ge' ">
+							AND SALARY <![CDATA[ >= ]]> #{salary}	<!-- "급여이상" -->
+						</when>
+						<otherwise>
+							AND SALARY <![CDATA[ <= ]]> #{salary} <!-- "급여이하" -->
+						</otherwise>
+					</choose>
+				</if>
+			</if>
+			<!-- hire_date 문자열로 처리 -->
+			<!-- <if test="hire_date != null and hire_date != '' ">
+				<if test="hiredateCompare !=null and hiredateCompare !='' ">
+					<choose>
+						<when test="hiredateCompare eq 'ge' ">
+							AND HIRE_DATE <![CDATA[ >= ]]> TO_DATE(#{hire_date}, 'yyyy-mm-dd') 
+						</when>
+						<otherwise>
+							AND HIRE_DATE <![CDATA[ <= ]]> TO_DATE(#{hire_date}, 'yyyy-mm-dd') 
+						</otherwise>
+					</choose>
+				</if>
+			</if> -->
+			
+			<!-- hireDate 날짜형으로 처리 -->
+			<if test="hireDate != null">
+				<if test="hiredateCompare !=null and hiredateCompare !='' ">
+					<choose>
+						<when test="hiredateCompare eq 'ge' ">
+							AND HIRE_DATE <![CDATA[ >= ]]> #{hireDate} <!-- 날짜 이후 -->
+						</when>
+						<otherwise>
+							AND HIRE_DATE <![CDATA[ <= ]]> #{hireDate} <!-- 날짜 이전 -->
+						</otherwise>
+					</choose>
+				</if>
+			</if>
+			
+		</where>
+	</select>
+	
+	<select id="selectJobList" resultType="map">
+		SELECT 
+			JOB_CODE "jobCode",
+			JOB_NAME "jobName"
+		FROM JOB
+	</select>	
+	
+	<select id="selectDeptList" resultType="map">
+		SELECT
+			DEPT_ID "deptId",
+			DEPT_TITLE "deptTitle"
+		FROM DEPT
+	</select>
+	
+	<select id="search3" resultType="map">
+		SELECT * 
+		FROM (
+			SELECT e.*, 
+				DECODE(SUBSTR(EMP_NO, 8, 1) , '1', '남' ,'3', '남', '여') GENDER,
+				DEPT_TITLE, 
+				JOB_NAME
+			FROM EMP e
+			LEFT JOIN DEPT ON (DEPT_CODE = DEPT_ID)
+			LEFT JOIN JOB J ON (E.JOB_CODE = J.JOB_CODE) <!-- LEFT JOIN : 왼쪽 테이블에 조인조건에 맞지 않는 값이 있어도 조회 -->
+		) e
+		<where>
+			<if test="jobCodeArr != null">
+				JOB_CODE IN 
+					<foreach collection="jobCodeArr" item="jobCode" 
+						open="(" close=")" separator=","
+					>
+						#{jobCode}
+					</foreach>
+					<!-- open : 반복을 처음 시작할때 "("로 시작함  -->
+					<!-- separator : 각각의 반복에 ","로 구분자를 추가한다.  -->
+					<!-- close : 마지막 반복을 마칠때 ")"로 마침  -->
+			</if>
+			<if test="deptIdArr != null">
+				AND NVL(DEPT_CODE, 'D0') IN  <!-- DEPT_CODE가 NULL일때는 'D0'로 치환  -->
+					<foreach collection="deptIdArr" item="deptId"
+						open="(" close=")" separator=",">
+						#{deptId}
+					</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectOneEmp" resultType="map">
+		SELECT 
+			E.*,
+			(SELECT DEPT_TITLE FROM DEPT WHERE DEPT_ID = DEPT_CODE) DEPT_TITLE,
+			(SELECT JOB_NAME FROM JOB J WHERE J.JOB_CODE = E.JOB_CODE) JOB_NAME <!-- 스칼라쿼리로 가져온 값 -->
+		FROM EMP E
+		WHERE EMP_ID = #{empId}
+			
+	</select>
+	
+	<!-- <update id="updateEmp">
+		UPDATE 
+			EMP
+		<set>
+			<if test="jobCode != null and jobCode != '' ">
+				JOB_CODE = #{jobCode},
+			</if>
+			<if test="deptCode != null and deptCode != '' ">
+				DEPT_CODE = #{deptCode}
+			</if>
+		</set>
+	
+		WHERE 
+			EMP_ID = #{empId} 
+	</update> -->
+	
+	<!-- trim 사용 -->
+	<update id="updateEmp">
+		UPDATE 
+			EMP
+		<trim prefix="set" suffixOverrides=",">
+			<if test="jobCode != null and jobCode != '' ">
+				JOB_CODE = #{jobCode}
+			</if>
+			<if test="deptCode != null and deptCode != '' ">
+				DEPT_CODE = #{deptCode}
+			</if>
+		</trim>
+	
+		WHERE 
+			EMP_ID = #{empId} 
+	</update>
+</mapper>

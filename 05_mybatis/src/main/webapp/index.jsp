@@ -18,5 +18,13 @@
 		</li>
 	</ul>
 	
+	<h2>emloyee</h2>
+	<ul>
+		<li><a href="/mybatis/emp/search1.do">/emp/search1.do</a></li>
+		<li><a href="/mybatis/emp/search2.do">/emp/search2.do</a></li>
+		<li><a href="/mybatis/emp/search3.do">/emp/search3.do</a></li>
+		<li><a href="/mybatis/emp/updateEmp.do">/emp/updateEmp.do</a></li>
+	</ul>
+	
 </body>
 </html>
