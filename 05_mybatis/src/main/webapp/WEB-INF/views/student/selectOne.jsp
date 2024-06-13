@@ -129,8 +129,8 @@
       				var $table = $("<table class='tbl-student'></table>");
       				if(data){
       					$table.append("<tr><th>학생번호</th><td>"+data.no+"</td></tr>")
-	      					  .append("<tr><th>이름</th><td>"+data.NAME+"</td></tr>") /* 우리가 생략했기 때문에 대문자로 들어감 (주석처리해서)*/
-	      					  .append("<tr><th>전화번호</th><td>"+data.TEL+"</td></tr>")
+	      					  .append("<tr><th>이름</th><td>"+data.name+"</td></tr>") /* 우리가 생략했기 때문에 대문자로 들어감 (주석처리해서)*/
+	      					  .append("<tr><th>전화번호</th><td>"+data.tel+"</td></tr>")
 	      					  .append("<tr><th>등록일</th><td>"+data.regDate+"</td></tr>")
       						  .insertAfter($("[name=ajaxStudentSearchFrm]"));
       				} else{

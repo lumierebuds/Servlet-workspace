@@ -60,8 +60,8 @@
       <c:forEach items="${mapList}" var="map">
       <tr>
          <td>${map.no}</td>
-         <td>${map.NAME}</td>
-         <td>${map.TEL}</td>
+         <td>${map.name}</td>
+         <td>${map.tel}</td>
          <td><fmt:formatDate value="${map.regDate}" pattern="yy/MM/dd HH:mm"/> </td>
       </tr>
       </c:forEach>

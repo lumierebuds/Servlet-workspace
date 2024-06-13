@@ -127,6 +127,16 @@
 		ORDER BY NO DESC
 	</select>
 	
+	<!-- [강사님 코드]
+	<select id="selectStudentListMap" resultType="map">
+		SELECT 
+		NO "no",
+		NAME "name",
+		TEL "tel",
+		REG_DATE "regDate"
+		ORDER BY NO DESC
+	</select>
+	 -->
 	
 	<!-- 
 		resultMap 
@@ -139,8 +149,8 @@
 		<!-- pk 칼럼용 태그(id) -->
 		<id column="no" property="no"/>
 		<!-- 나머지 칼럼 -->
-		<!-- <result column="name" property="name"/>
-		<result column="tel" property="tel"/> -->
+		<result column="name" property="name"/>
+		<result column="tel" property="tel"/> 
 		<result column="reg_date" property="regDate"/>
 	</resultMap>
 	

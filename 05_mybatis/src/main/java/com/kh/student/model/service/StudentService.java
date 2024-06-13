@@ -129,6 +129,7 @@ public class StudentService {
 	}
 
 	public List<Map<String, Object>> selectStudentListMap() {
+
 		SqlSession session = getSqlSession();
 
 		List<Map<String, Object>> mapList = dao.selectStudentListMap(session);

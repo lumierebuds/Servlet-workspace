@@ -34,6 +34,10 @@ import javax.servlet.http.HttpServletResponse;
  *  - Servlet객체가 초기화될때 등록가능한 핸들러정보들을 읽어들인 후 urlPattern과 핸들러를 key:value형태로 보관
  *  	(init 메서드로 초기화될때 등록) 
  * 
+ * 2. ViewResolver 
+ *  - 핸들러의 반환값(viewName)을 기반으로 클라이언트에게 응답할 view페이지를 선택하는 객체
+ *    ex) 컨트롤러에서 "notice/list"를 반환하면 "/WEB-INF/views/"+ viewName+".jsp"
+ * 
  * 
  */
 
